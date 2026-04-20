@@ -1,5 +1,7 @@
+import asyncio
 import logging
 import os
+import re
 from contextlib import asynccontextmanager
 from functools import lru_cache
 from typing import Any
@@ -14,7 +16,7 @@ from qdrant_client import AsyncQdrantClient, models
 
 EMBEDDINGS_DENSE_MODEL = "Qwen/Qwen3-Embedding-0.6B"
 
-# Ваш сервис должен считывать эти переменные из окружения (env), так как проверяющая система управляет ими
+
 HOST = os.getenv("HOST", "0.0.0.0")
 PORT = int(os.getenv("PORT", "8003"))
 
@@ -73,7 +75,8 @@ def get_upstream_request_kwargs() -> dict[str, Any]:
     return kwargs
 
 
-# Модель данных, которую мы предоставляем и рассчитываем получать от вас
+
+
 class DateRange(BaseModel):
     from_: str = Field(alias="from")
     to: str
@@ -129,10 +132,10 @@ class SparseVector(BaseModel):
 class SparseEmbeddingResponse(BaseModel):
     vectors: list[SparseVector]
 
-# Метадата чанков в Qdrant'e, по которой вы можете фильтровать
+
 class ChunkMetadata(BaseModel):
     chat_name: str
-    chat_type: str # channel, group, private, thread
+    chat_type: str
     chat_id: str
     chat_sn: str
     thread_sn: str | None = None
@@ -168,16 +171,19 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="Search Service", version="0.1.0", lifespan=lifespan)
 
 
-# Внутри шаблона dense и rerank берутся из внешних HTTP endpoint'ов,
-# которые предоставляет проверяющая система.
-# Текущий код ниже — минимальный пример search pipeline.
-DENSE_PREFETCH_K = 10
-SPRASE_PREFETCH_K = 30
-RETRIEVE_K = 20
-RERANK_LIMIT = 10
+
+DENSE_PREFETCH_K = 150
+SPARSE_PREFETCH_K = 200
+VARIANT_SPARSE_K = 100
+RETRIEVE_K = 100
+RERANK_CANDIDATES = 20     
+MAX_MESSAGE_IDS = 50
+MAX_VARIANTS = 3
+MAX_DENSE_TEXTS = 3
+TIER1_LIMIT = 35           
+
 
 async def embed_dense(client: httpx.AsyncClient, text: str) -> list[float]:
-    # Dense endpoint ожидает OpenAI-compatible body с input как списком строк.
     response = await client.post(
         EMBEDDINGS_DENSE_URL,
         **get_upstream_request_kwargs(),
@@ -185,94 +191,153 @@ async def embed_dense(client: httpx.AsyncClient, text: str) -> list[float]:
             "model": os.getenv("EMBEDDINGS_DENSE_MODEL", EMBEDDINGS_DENSE_MODEL),
             "input": [text],
         },
+        timeout=30,
     )
     response.raise_for_status()
-
     payload = DenseEmbeddingResponse.model_validate(response.json())
     if not payload.data:
         raise ValueError("Dense embedding response is empty")
-
     return payload.data[0].embedding
+
+
+async def embed_dense_batch(client: httpx.AsyncClient, texts: list[str]) -> list[list[float]]:
+    """Embed multiple texts in a single API call — no extra rate limit cost per request."""
+    response = await client.post(
+        EMBEDDINGS_DENSE_URL,
+        **get_upstream_request_kwargs(),
+        json={
+            "model": os.getenv("EMBEDDINGS_DENSE_MODEL", EMBEDDINGS_DENSE_MODEL),
+            "input": texts,
+        },
+        timeout=30,
+    )
+    response.raise_for_status()
+    payload = DenseEmbeddingResponse.model_validate(response.json())
+    if not payload.data:
+        raise ValueError("Dense embedding response is empty")
+    sorted_data = sorted(payload.data, key=lambda x: x.index)
+    return [item.embedding for item in sorted_data]
 
 
 async def embed_sparse(text: str) -> SparseVector:
     vectors = list(get_sparse_model().embed([text]))
     if not vectors:
         raise ValueError("Sparse embedding response is empty")
-
     item = vectors[0]
     return SparseVector(
-        indices=[int(index) for index in item.indices.tolist()],
-        values=[float(value) for value in item.values.tolist()],
+        indices=[int(i) for i in item.indices.tolist()],
+        values=[float(v) for v in item.values.tolist()],
     )
+
+
+async def embed_sparse_multi(texts: list[str]) -> list[SparseVector]:
+    """Embed multiple texts as sparse vectors in one batch (runs in thread)."""
+    def _embed() -> list[SparseVector]:
+        model = get_sparse_model()
+        results: list[SparseVector] = []
+        for item in model.embed(texts):
+            results.append(SparseVector(
+                indices=[int(i) for i in item.indices.tolist()],
+                values=[float(v) for v in item.values.tolist()],
+            ))
+        return results
+    return await asyncio.to_thread(_embed)
 
 
 async def qdrant_search(
     client: AsyncQdrantClient,
-    dense_vector: list[float],
-    sparse_vector: SparseVector,
-) -> Any | None:
-    response = await client.query_points(
-        collection_name=QDRANT_COLLECTION_NAME,
-        prefetch=[
+    dense_vectors: list[list[float]],
+    sparse_vectors: list[SparseVector],
+    entity_values: list[str] | None = None,
+) -> list[Any]:
+    prefetch: list[models.Prefetch] = []
+
+
+    for dv in dense_vectors:
+        prefetch.append(
             models.Prefetch(
-                query=dense_vector,
+                query=dv,
                 using=QDRANT_DENSE_VECTOR_NAME,
                 limit=DENSE_PREFETCH_K,
-            ),
+            )
+        )
+
+
+    for i, sv in enumerate(sparse_vectors):
+        limit = SPARSE_PREFETCH_K if i == 0 else VARIANT_SPARSE_K
+        prefetch.append(
             models.Prefetch(
                 query=models.SparseVector(
-                    indices=sparse_vector.indices,
-                    values=sparse_vector.values,
+                    indices=sv.indices,
+                    values=sv.values,
                 ),
                 using=QDRANT_SPARSE_VECTOR_NAME,
-                limit=SPRASE_PREFETCH_K,
-            ),
-        ],
-        query=models.FusionQuery(fusion=models.Fusion.RRF),
+                limit=limit,
+            )
+        )
+
+
+    if entity_values and dense_vectors:
+        try:
+            prefetch.append(
+                models.Prefetch(
+                    query=dense_vectors[0],
+                    using=QDRANT_DENSE_VECTOR_NAME,
+                    limit=50,
+                    filter=models.Filter(
+                        should=[
+                            models.FieldCondition(
+                                key="metadata.mentions",
+                                match=models.MatchAny(any=entity_values),
+                            ),
+                            models.FieldCondition(
+                                key="metadata.participants",
+                                match=models.MatchAny(any=entity_values),
+                            ),
+                        ]
+                    ),
+                )
+            )
+        except Exception:
+            pass
+
+    response = await client.query_points(
+        collection_name=QDRANT_COLLECTION_NAME,
+        prefetch=prefetch,
+        query=models.FusionQuery(fusion=models.Fusion.DBSF),
         limit=RETRIEVE_K,
         with_payload=True,
     )
-
-    if not response.points:
-        return None
-
-    return response.points
+    return response.points or []
 
 
 def extract_message_ids(point: Any) -> list[str]:
     payload = point.payload or {}
     metadata = payload.get("metadata") or {}
-    message_ids = metadata.get("message_ids") or []
-
-    return [str(message_id) for message_id in message_ids]
+    return [str(mid) for mid in (metadata.get("message_ids") or [])]
 
 
 async def get_rerank_scores(
     client: httpx.AsyncClient,
-    label: str,
+    query: str,
     targets: list[str],
 ) -> list[float]:
     if not targets:
         return []
-
-    # Rerank endpoint возвращает score для пары query -> candidate text.
     response = await client.post(
         RERANKER_URL,
         **get_upstream_request_kwargs(),
         json={
             "model": RERANKER_MODEL,
             "encoding_format": "float",
-            "text_1": label,
+            "text_1": query,
             "text_2": targets,
         },
+        timeout=60,
     )
     response.raise_for_status()
-
-    payload = response.json()
-    data = payload.get("data") or []
-
-    return [float(sample["score"]) for sample in data]
+    data = response.json().get("data") or []
+    return [float(s["score"]) for s in data]
 
 
 async def rerank_points(
@@ -280,23 +345,85 @@ async def rerank_points(
     query: str,
     points: list[Any],
 ) -> list[Any]:
-    rerank_candidates = points[:10]
-    rerank_targets = [point.payload.get("page_content") for point in rerank_candidates]
-    scores = await get_rerank_scores(client, query, rerank_targets)
-
-    reranked_candidates = [
+    if not points:
+        return points
+    candidates = points[:RERANK_CANDIDATES]
+    try:
+        targets = [p.payload.get("page_content", "") for p in candidates]
+        scores = await get_rerank_scores(client, query, targets)
+    except Exception as e:
+        logger.warning("Reranker failed, skipping: %s", e)
+        return points
+    if not scores:
+        return points
+    reranked = [
         point
         for _, point in sorted(
-            zip(scores, rerank_candidates, strict=True),
-            key=lambda item: item[0],
+            zip(scores, candidates, strict=True),
+            key=lambda x: x[0],
             reverse=True,
         )
     ]
+    return reranked + points[RERANK_CANDIDATES:]
 
-    return reranked_candidates
 
 
-# Ваш сервис должен имплементировать оба этих метода
+
+_TAG_RE = re.compile(r'\[([^\]|]+)\|([^\]]+)\]\s*')
+
+
+def parse_tagged_messages(page_content: str) -> dict[str, str]:
+
+
+    result: dict[str, str] = {}
+    matches = list(_TAG_RE.finditer(page_content))
+    for i, match in enumerate(matches):
+        msg_id = match.group(1)
+        sender = match.group(2)
+        text_start = match.end()
+        text_end = matches[i + 1].start() if i + 1 < len(matches) else len(page_content)
+        text = page_content[text_start:text_end].strip()
+        result[msg_id] = f"{sender} {text}"
+    return result
+
+
+def build_query_terms(question: Question) -> set[str]:
+
+    terms: set[str] = set()
+    for word in question.text.lower().split():
+        if len(word) >= 3:
+            terms.add(word)
+    if question.keywords:
+        for kw in question.keywords:
+            for word in kw.lower().split():
+                if len(word) >= 3:
+                    terms.add(word)
+    if question.entities:
+        for field in (question.entities.people, question.entities.names,
+                      question.entities.emails, question.entities.documents):
+            if field:
+                for entity in field:
+                    for word in entity.lower().split():
+                        if len(word) >= 2:
+                            terms.add(word)
+    if question.date_mentions:
+        for dm in question.date_mentions:
+            for word in dm.lower().split():
+                if len(word) >= 3:
+                    terms.add(word)
+    return terms
+
+
+def keyword_score(terms: set[str], text: str) -> float:
+
+    if not terms or not text:
+        return 0.0
+    text_lower = text.lower()
+    matches = sum(1 for t in terms if t in text_lower)
+    return matches / len(terms) if terms else 0.0
+
+
+
 @app.get("/health")
 async def health() -> dict[str, str]:
     return {"status": "ok"}
@@ -304,25 +431,110 @@ async def health() -> dict[str, str]:
 
 @app.post("/search", response_model=SearchAPIResponse)
 async def search(payload: SearchAPIRequest) -> SearchAPIResponse:
-    query = payload.question.text.strip()
+    question = payload.question
+    query = question.text.strip()
     if not query:
         raise HTTPException(status_code=400, detail="question.text is required")
 
     client: httpx.AsyncClient = app.state.http
     qdrant: AsyncQdrantClient = app.state.qdrant
 
-    dense_vector = await embed_dense(client, query)
-    sparse_vector = await embed_sparse(query)
-    best_points = await qdrant_search(qdrant, dense_vector, sparse_vector)
+   
+    dense_texts = [query]
+    if question.hyde and question.hyde[0].strip():
+        dense_texts.append(question.hyde[0].strip())
+    if question.search_text and question.search_text.strip() and question.search_text.strip() != query:
+        if len(dense_texts) < MAX_DENSE_TEXTS:
+            dense_texts.append(question.search_text.strip())
 
-    if best_points is None:
+
+
+    sparse_query = query
+    if question.keywords:
+        sparse_query = query + " " + " ".join(question.keywords)
+    entity_filter_values: list[str] = []
+    if question.entities:
+        entity_terms: list[str] = []
+        for field in (question.entities.people, question.entities.names,
+                      question.entities.emails, question.entities.documents,
+                      question.entities.links):
+            if field:
+                entity_terms.extend(field)
+        if entity_terms:
+            sparse_query = sparse_query + " " + " ".join(entity_terms)
+
+
+        for field in (question.entities.people, question.entities.names):
+            if field:
+                entity_filter_values.extend(field)
+    if question.date_mentions:
+        sparse_query = sparse_query + " " + " ".join(question.date_mentions)
+
+    sparse_texts = [sparse_query]
+    if question.search_text and question.search_text.strip() and question.search_text.strip() != query:
+        sparse_texts.append(question.search_text.strip())
+    if question.variants:
+        for v in question.variants[:MAX_VARIANTS]:
+            v_text = v.strip()
+            if v_text:
+                sparse_texts.append(v_text)
+
+    logger.info("Dense texts (%d, hyde=%s): %s",
+                len(dense_texts), bool(question.hyde), dense_texts[0][:80])
+    logger.info("Sparse texts (%d): %s",
+                len(sparse_texts), sparse_texts[0][:80])
+
+
+    dense_vectors, sparse_vectors = await asyncio.gather(
+        embed_dense_batch(client, dense_texts),
+        embed_sparse_multi(sparse_texts),
+    )
+    points = await qdrant_search(
+        qdrant, dense_vectors, sparse_vectors,
+        entity_values=entity_filter_values or None,
+    )
+
+    if not points:
         return SearchAPIResponse(results=[])
 
-    best_points = await rerank_points(client, query, list(best_points))
 
-    message_ids: list[str] = [] 
-    for point in best_points:
-        message_ids += extract_message_ids(point)
+
+    points = await rerank_points(client, query, points)
+
+
+
+    query_terms = build_query_terms(question)
+
+
+
+    seen: set[str] = set()
+    tier1: list[str] = []
+    for point in points:
+        for mid in extract_message_ids(point):
+            if mid not in seen:
+                seen.add(mid)
+                tier1.append(mid)
+                if len(tier1) >= TIER1_LIMIT:
+                    break
+        if len(tier1) >= TIER1_LIMIT:
+            break
+
+
+
+    tier2_scores: dict[str, float] = {}
+    for point in points:
+        page_content = point.payload.get("page_content", "")
+        mids = extract_message_ids(point)
+        tagged = parse_tagged_messages(page_content)
+        for mid in mids:
+            if mid not in seen and mid not in tier2_scores:
+                text = tagged.get(mid, "")
+                tier2_scores[mid] = keyword_score(query_terms, text)
+
+    # Сортируем tier2 по keyword score (лучшие совпадения первыми)
+    tier2 = sorted(tier2_scores.keys(), key=lambda m: tier2_scores[m], reverse=True)
+
+    message_ids = (tier1 + tier2)[:MAX_MESSAGE_IDS]
 
     return SearchAPIResponse(
         results=[SearchAPIItem(message_ids=message_ids)]
