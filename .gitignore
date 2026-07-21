@@ -214,3 +214,16 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# macOS
+.DS_Store
+
+
+
+data/*
+!data/Go Nova.json
+!data/demo_chat.json
+
+
+ml_service/.model_cache/*
+!ml_service/.model_cache/.keep
