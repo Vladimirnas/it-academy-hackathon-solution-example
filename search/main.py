@@ -31,6 +31,7 @@ OPEN_API_LOGIN = os.getenv("OPEN_API_LOGIN")
 OPEN_API_PASSWORD = os.getenv("OPEN_API_PASSWORD")
 QDRANT_URL = os.getenv("QDRANT_URL")
 QDRANT_COLLECTION_NAME = os.getenv("QDRANT_COLLECTION_NAME", "evaluation")
+QDRANT_FUSION = os.getenv("QDRANT_FUSION", "DBSF").upper()
 REQUIRED_ENV_VARS = [
     "EMBEDDINGS_DENSE_URL",
     "RERANKER_URL",
@@ -73,8 +74,6 @@ def get_upstream_request_kwargs() -> dict[str, Any]:
         headers["Authorization"] = f"Bearer {API_KEY}"
 
     return kwargs
-
-
 
 
 class DateRange(BaseModel):
@@ -171,12 +170,13 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="Search Service", version="0.1.0", lifespan=lifespan)
 
 
-
 DENSE_PREFETCH_K = 150
 SPARSE_PREFETCH_K = 200
 VARIANT_SPARSE_K = 100
 RETRIEVE_K = 100
-RERANK_CANDIDATES = 20     
+RERANK_CANDIDATES = 20
+MESSAGE_RERANK_CANDIDATES = 60
+MAX_RERANK_TEXT_CHARS = 1200
 MAX_MESSAGE_IDS = 50
 MAX_VARIANTS = 3
 MAX_DENSE_TEXTS = 3
@@ -201,7 +201,6 @@ async def embed_dense(client: httpx.AsyncClient, text: str) -> list[float]:
 
 
 async def embed_dense_batch(client: httpx.AsyncClient, texts: list[str]) -> list[list[float]]:
-    """Embed multiple texts in a single API call — no extra rate limit cost per request."""
     response = await client.post(
         EMBEDDINGS_DENSE_URL,
         **get_upstream_request_kwargs(),
@@ -231,7 +230,6 @@ async def embed_sparse(text: str) -> SparseVector:
 
 
 async def embed_sparse_multi(texts: list[str]) -> list[SparseVector]:
-    """Embed multiple texts as sparse vectors in one batch (runs in thread)."""
     def _embed() -> list[SparseVector]:
         model = get_sparse_model()
         results: list[SparseVector] = []
@@ -304,7 +302,9 @@ async def qdrant_search(
     response = await client.query_points(
         collection_name=QDRANT_COLLECTION_NAME,
         prefetch=prefetch,
-        query=models.FusionQuery(fusion=models.Fusion.DBSF),
+        query=models.FusionQuery(
+            fusion=models.Fusion.RRF if QDRANT_FUSION == "RRF" else models.Fusion.DBSF
+        ),
         limit=RETRIEVE_K,
         with_payload=True,
     )
@@ -367,6 +367,46 @@ async def rerank_points(
     return reranked + points[RERANK_CANDIDATES:]
 
 
+async def rerank_messages(
+    client: httpx.AsyncClient,
+    query: str,
+    points: list[Any],
+) -> list[str]:
+    texts: dict[str, str] = {}
+    order: list[str] = []
+
+    for point in points:
+        tagged = parse_tagged_messages(point.payload.get("page_content", ""))
+        for mid in extract_message_ids(point):
+            if mid in texts:
+                continue
+            text = tagged.get(mid, "").strip()
+            if not text:
+                continue
+            texts[mid] = text[:MAX_RERANK_TEXT_CHARS]
+            order.append(mid)
+            if len(order) >= MESSAGE_RERANK_CANDIDATES:
+                break
+        if len(order) >= MESSAGE_RERANK_CANDIDATES:
+            break
+
+    if not order:
+        return []
+
+    try:
+        scores = await get_rerank_scores(client, query, [texts[m] for m in order])
+    except Exception as e:
+        logger.warning("Message reranker failed, keeping retrieval order: %s", e)
+        return order
+    if len(scores) != len(order):
+        logger.warning("Reranker returned %d scores for %d texts, keeping order",
+                       len(scores), len(order))
+        return order
+
+    return [
+        mid
+        for _, mid in sorted(zip(scores, order, strict=True), key=lambda x: x[0], reverse=True)
+    ]
 
 
 _TAG_RE = re.compile(r'\[([^\]|]+)\|([^\]]+)\]\s*')
@@ -387,16 +427,31 @@ def parse_tagged_messages(page_content: str) -> dict[str, str]:
     return result
 
 
+STOP_WORDS = {
+    "кто", "что", "как", "где", "когда", "какой", "какая", "какие", "какое",
+    "чем", "чём", "кого", "кому", "чей", "зачем", "почему", "куда", "откуда",
+    "был", "была", "было", "были", "есть", "это", "этот", "эта", "эти",
+    "для", "или", "если", "так", "там", "тут", "она", "они", "оно", "все",
+    "всех", "нужно", "можно", "какому", "каком", "каких",
+}
+
+
+def _clean_term(word: str) -> str:
+    return word.strip(".,!?;:()[]«»\"'…")
+
+
 def build_query_terms(question: Question) -> set[str]:
 
     terms: set[str] = set()
     for word in question.text.lower().split():
-        if len(word) >= 3:
+        word = _clean_term(word)
+        if len(word) >= 3 and word not in STOP_WORDS:
             terms.add(word)
     if question.keywords:
         for kw in question.keywords:
             for word in kw.lower().split():
-                if len(word) >= 3:
+                word = _clean_term(word)
+                if len(word) >= 3 and word not in STOP_WORDS:
                     terms.add(word)
     if question.entities:
         for field in (question.entities.people, question.entities.names,
@@ -414,14 +469,23 @@ def build_query_terms(question: Question) -> set[str]:
     return terms
 
 
+STEM_MIN_LEN = 4
+
+
+def _same_stem(term: str, word: str) -> bool:
+    n = min(len(term), len(word))
+    if n < STEM_MIN_LEN:
+        return term == word
+    return term[:n] == word[:n]
+
+
 def keyword_score(terms: set[str], text: str) -> float:
 
     if not terms or not text:
         return 0.0
-    text_lower = text.lower()
-    matches = sum(1 for t in terms if t in text_lower)
+    words = set(re.findall(r"\w+", text.lower()))
+    matches = sum(1 for t in terms if any(_same_stem(t, w) for w in words))
     return matches / len(terms) if terms else 0.0
-
 
 
 @app.get("/health")
@@ -446,7 +510,6 @@ async def search(payload: SearchAPIRequest) -> SearchAPIResponse:
     if question.search_text and question.search_text.strip() and question.search_text.strip() != query:
         if len(dense_texts) < MAX_DENSE_TEXTS:
             dense_texts.append(question.search_text.strip())
-
 
 
     sparse_query = query
@@ -498,27 +561,10 @@ async def search(payload: SearchAPIRequest) -> SearchAPIResponse:
         return SearchAPIResponse(results=[])
 
 
-
-    points = await rerank_points(client, query, points)
-
-
-
     query_terms = build_query_terms(question)
 
-
-
-    seen: set[str] = set()
-    tier1: list[str] = []
-    for point in points:
-        for mid in extract_message_ids(point):
-            if mid not in seen:
-                seen.add(mid)
-                tier1.append(mid)
-                if len(tier1) >= TIER1_LIMIT:
-                    break
-        if len(tier1) >= TIER1_LIMIT:
-            break
-
+    tier1 = (await rerank_messages(client, query, points))[:TIER1_LIMIT]
+    seen: set[str] = set(tier1)
 
 
     tier2_scores: dict[str, float] = {}
@@ -531,7 +577,6 @@ async def search(payload: SearchAPIRequest) -> SearchAPIResponse:
                 text = tagged.get(mid, "")
                 tier2_scores[mid] = keyword_score(query_terms, text)
 
-    # Сортируем tier2 по keyword score (лучшие совпадения первыми)
     tier2 = sorted(tier2_scores.keys(), key=lambda m: tier2_scores[m], reverse=True)
 
     message_ids = (tier1 + tier2)[:MAX_MESSAGE_IDS]
