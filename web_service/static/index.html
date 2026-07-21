@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Проверка поиска по чату</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+  <h1>Проверка поиска по истории чата</h1>
+  <div class="sub" id="corpus-info">загрузка…</div>
+
+  <div class="chat-switch">
+    <label for="chat">Чат:</label>
+    <select id="chat"></select>
+    <span class="chat-hint" id="chat-hint"></span>
+    <label class="upload-btn">
+      загрузить экспорт Telegram
+      <input type="file" id="upload" accept=".json" hidden>
+    </label>
+  </div>
+
+  <form id="form">
+    <input type="text" id="q" placeholder="Задайте вопрос по содержанию чата…" autocomplete="off">
+    <button type="submit" id="btn">Найти</button>
+  </form>
+
+  <div class="examples">
+    <div class="examples-label">Примеры вопросов:</div>
+    <div id="examples"></div>
+  </div>
+
+  <div id="meta" class="meta"></div>
+  <div id="answer"></div>
+  <div id="results"></div>
+</div>
+
+<script src="/app.js"></script>
+</body>
+</html>
