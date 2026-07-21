@@ -1,0 +1,2485 @@
+{
+  "chat": {
+    "id": "91043@chat.example",
+    "name": "Platform Team",
+    "sn": "91043@chat.example",
+    "type": "group",
+    "is_public": false,
+    "members_count": 42,
+    "members": null
+  },
+  "messages": [
+    {
+      "id": "7000000000000000000",
+      "thread_sn": null,
+      "time": 1772446500,
+      "text": "Всем привет! С понедельника выкатываем новый профиль сборки, старый Makefile больше не поддерживается. Документация тут: https://redacted.example/docs/build",
+      "sender_id": "a.morozov@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7000111111111111111",
+      "thread_sn": null,
+      "time": 1772448120,
+      "text": "А что делать тем, у кого сборка завязана на make release? Он вообще останется?",
+      "sender_id": "e.titova@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "a.morozov@corp.example",
+          "time": 1772446500,
+          "text": "Всем привет! С понедельника выкатываем новый профиль сборки, старый Makefile больше не поддерживается. Документация тут: https://redacted.example/docs/build"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7000222222222222222",
+      "thread_sn": null,
+      "time": 1772449500,
+      "text": "Останется как алиас на taskfile до конца квартала, потом уберём. Лучше сразу переезжайте на task release",
+      "sender_id": "a.morozov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "e.titova@corp.example",
+          "time": 1772448120,
+          "text": "А что делать тем, у кого сборка завязана на make release? Он вообще останется?"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7000333333333333333",
+      "thread_sn": null,
+      "time": 1772451000,
+      "text": "У нас в трёх сервисах кастомные таргеты в Makefile. Их как переносить?",
+      "sender_id": "d.kuznetsov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "a.morozov@corp.example",
+          "time": 1772449500,
+          "text": "Останется как алиас на taskfile до конца квартала, потом уберём. Лучше сразу переезжайте на task release"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7000444444444444444",
+      "thread_sn": null,
+      "time": 1772452800,
+      "text": "Просто в Taskfile.yml секцией tasks, синтаксис почти один в один. Если застрянешь — скинь свой Makefile, помогу",
+      "sender_id": "a.morozov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "d.kuznetsov@corp.example",
+          "time": 1772451000,
+          "text": "У нас в трёх сервисах кастомные таргеты в Makefile. Их как переносить?"
+        }
+      ],
+      "mentions": [
+        "d.kuznetsov@corp.example"
+      ],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7000555555555555555",
+      "thread_sn": null,
+      "time": 1772616600,
+      "text": "Коллеги, кто-нибудь сталкивался с тем, что пайплайн падает на этапе интеграционных тестов с таймаутом подключения к постгресу?",
+      "sender_id": "d.kuznetsov@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7000666666666666666",
+      "thread_sn": null,
+      "time": 1772617860,
+      "text": "Да, у нас было такое на прошлой неделе. Помогло увеличить healthcheck-интервал у контейнера с базой — она не успевала подняться до старта тестов",
+      "sender_id": "s.gavrilov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "d.kuznetsov@corp.example",
+          "time": 1772616600,
+          "text": "Коллеги, кто-нибудь сталкивался с тем, что пайплайн падает на этапе интеграционных тестов с таймаутом подключения к постгресу?"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7000777777777777777",
+      "thread_sn": null,
+      "time": 1772618520,
+      "text": "Сработало, спасибо! Поставил interval 5s и retries 10",
+      "sender_id": "d.kuznetsov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "s.gavrilov@corp.example",
+          "time": 1772617860,
+          "text": "Да, у нас было такое на прошлой неделе. Помогло увеличить healthcheck-интервал у контейнера с базой — она не успевала подняться до старта тестов"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7000888888888888888",
+      "thread_sn": null,
+      "time": 1772619600,
+      "text": "Может вынести это в общий шаблон пайплайна, чтобы каждый раз не наступать? Заведу задачу",
+      "sender_id": "n.polyakova@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "d.kuznetsov@corp.example",
+          "time": 1772618520,
+          "text": "Сработало, спасибо! Поставил interval 5s и retries 10"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7000999999999999999",
+      "thread_sn": null,
+      "time": 1773066000,
+      "text": "Открываю обсуждение: выбираем брокер сообщений для нового сервиса нотификаций. Нагрузка ожидается около 3 тысяч сообщений в секунду на пике",
+      "sender_id": "n.polyakova@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7001111111111111110",
+      "thread_sn": null,
+      "time": 1773067680,
+      "text": "За Kafka: у нас уже есть кластер под аналитику, не придётся поднимать новую инфраструктуру. Плюс нужна история сообщений на случай переобработки",
+      "sender_id": "s.gavrilov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "n.polyakova@corp.example",
+          "time": 1773066000,
+          "text": "Открываю обсуждение: выбираем брокер сообщений для нового сервиса нотификаций. Нагрузка ожидается около 3 тысяч сообщений в секунду на пике"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7001222222222222221",
+      "thread_sn": null,
+      "time": 1773068580,
+      "text": "За RabbitMQ: у нотификаций нет требования хранить историю, а роутинг по типам уведомлений на нём делается заметно проще. Kafka под такую задачу избыточна",
+      "sender_id": "e.titova@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "n.polyakova@corp.example",
+          "time": 1773066000,
+          "text": "Открываю обсуждение: выбираем брокер сообщений для нового сервиса нотификаций. Нагрузка ожидается около 3 тысяч сообщений в секунду на пике"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7001333333333333332",
+      "thread_sn": null,
+      "time": 1773069600,
+      "text": "Ещё момент: у Kafka порог входа выше. Дежурному ночью разбираться с лагом консьюмер-группы сложнее, чем с очередью в RabbitMQ",
+      "sender_id": "d.kuznetsov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "e.titova@corp.example",
+          "time": 1773068580,
+          "text": "За RabbitMQ: у нотификаций нет требования хранить историю, а роутинг по типам уведомлений на нём делается заметно проще. Kafka под такую задачу избыточна"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7001444444444444443",
+      "thread_sn": null,
+      "time": 1773070800,
+      "text": "Согласен, но обучить проще, чем содержать два брокера. Эксплуатация второго — это отдельные алерты, бэкапы, обновления",
+      "sender_id": "s.gavrilov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "d.kuznetsov@corp.example",
+          "time": 1773069600,
+          "text": "Ещё момент: у Kafka порог входа выше. Дежурному ночью разбираться с лагом консьюмер-группы сложнее, чем с очередью в RabbitMQ"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7001555555555555554",
+      "thread_sn": null,
+      "time": 1773073800,
+      "text": "Решили: берём Kafka. Основной аргумент — не плодить второй брокер в эксплуатации, кластер уже есть и его обслуживает та же команда",
+      "sender_id": "n.polyakova@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7001666666666666665",
+      "thread_sn": null,
+      "time": 1773074700,
+      "text": "Ок, тогда я опишу схему топиков и партиционирование, вынесу на ревью завтра",
+      "sender_id": "e.titova@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "n.polyakova@corp.example",
+          "time": 1773073800,
+          "text": "Решили: берём Kafka. Основной аргумент — не плодить второй брокер в эксплуатации, кластер уже есть и его обслуживает та же команда"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7001777777777777776",
+      "thread_sn": null,
+      "time": 1773226800,
+      "text": "Привет! Я новенький, вышел вчера в команду платформы. Подскажите, с чего начать погружение?",
+      "sender_id": "i.zhuravlev@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7001888888888888887",
+      "thread_sn": null,
+      "time": 1773228120,
+      "text": "Привет! Начни с онбординг-гайда: https://redacted.example/onboarding. Там схема сервисов и как поднять окружение локально",
+      "sender_id": "n.polyakova@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "i.zhuravlev@corp.example",
+          "time": 1773226800,
+          "text": "Привет! Я новенький, вышел вчера в команду платформы. Подскажите, с чего начать погружение?"
+        }
+      ],
+      "mentions": [
+        "i.zhuravlev@corp.example"
+      ],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7001999999999999998",
+      "thread_sn": null,
+      "time": 1773229200,
+      "text": "И обязательно запроси доступы через сервис-деск: гитлаб, стенды и графану. Обычно выдают за день",
+      "sender_id": "a.morozov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "i.zhuravlev@corp.example",
+          "time": 1773226800,
+          "text": "Привет! Я новенький, вышел вчера в команду платформы. Подскажите, с чего начать погружение?"
+        }
+      ],
+      "mentions": [
+        "i.zhuravlev@corp.example"
+      ],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7002111111111111109",
+      "thread_sn": null,
+      "time": 1773231000,
+      "text": "Спасибо! А есть какой-то канонический список сервисов, за которые команда отвечает?",
+      "sender_id": "i.zhuravlev@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "a.morozov@corp.example",
+          "time": 1773229200,
+          "text": "И обязательно запроси доступы через сервис-деск: гитлаб, стенды и графану. Обычно выдают за день"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7002222222222222220",
+      "thread_sn": null,
+      "time": 1773231900,
+      "text": "Да, в вики раздел Карта сервисов. Там же владельцы и ссылки на дашборды",
+      "sender_id": "n.polyakova@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "i.zhuravlev@corp.example",
+          "time": 1773231000,
+          "text": "Спасибо! А есть какой-то канонический список сервисов, за которые команда отвечает?"
+        }
+      ],
+      "mentions": [
+        "i.zhuravlev@corp.example"
+      ],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7002333333333333331",
+      "thread_sn": null,
+      "time": 1773309900,
+      "text": "Заметил, что несколько подов регулярно ловят OOMKilled. Лимит памяти стоит 256Mi, а сервис на пике доходит до 400",
+      "sender_id": "s.gavrilov@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7002444444444444442",
+      "thread_sn": null,
+      "time": 1773311400,
+      "text": "Это наследие от первого деплоя, лимиты выставляли на глаз. Надо пройтись по всем и выставить по факту потребления",
+      "sender_id": "a.morozov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "s.gavrilov@corp.example",
+          "time": 1773309900,
+          "text": "Заметил, что несколько подов регулярно ловят OOMKilled. Лимит памяти стоит 256Mi, а сервис на пике доходит до 400"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7002555555555555553",
+      "thread_sn": null,
+      "time": 1773312600,
+      "text": "В графане есть дашборд по потреблению за 30 дней, можно взять 95-й перцентиль и добавить запас процентов 30",
+      "sender_id": "d.kuznetsov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "a.morozov@corp.example",
+          "time": 1773311400,
+          "text": "Это наследие от первого деплоя, лимиты выставляли на глаз. Надо пройтись по всем и выставить по факту потребления"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7002666666666666664",
+      "thread_sn": null,
+      "time": 1773314100,
+      "text": "Ок, соберу таблицу по всем сервисам и вынесу на обсуждение",
+      "sender_id": "s.gavrilov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "d.kuznetsov@corp.example",
+          "time": 1773312600,
+          "text": "В графане есть дашборд по потреблению за 30 дней, можно взять 95-й перцентиль и добавить запас процентов 30"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7002777777777777775",
+      "thread_sn": null,
+      "time": 1773327600,
+      "text": "Таблица готова. Восемь сервисов недоливают память, три наоборот перезаложены втрое. Суммарно можно освободить около 6 гигабайт на кластере",
+      "sender_id": "s.gavrilov@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7002888888888888886",
+      "thread_sn": null,
+      "time": 1773328800,
+      "text": "Отлично, давай раскатывать постепенно — по два сервиса в день, чтобы отследить эффект",
+      "sender_id": "n.polyakova@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "s.gavrilov@corp.example",
+          "time": 1773327600,
+          "text": "Таблица готова. Восемь сервисов недоливают память, три наоборот перезаложены втрое. Суммарно можно освободить около 6 гигабайт на кластере"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7002999999999999997",
+      "thread_sn": null,
+      "time": 1773630720,
+      "text": "Инцидент INC-2291: пятиминутка недоступности API. Пятьсот третьи на всех эндпоинтах с 03:07 до 03:12 по Москве",
+      "sender_id": "s.gavrilov@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7003111111111111108",
+      "thread_sn": null,
+      "time": 1773631500,
+      "text": "Причина — закончились коннекты в пуле к базе. Фоновая задача пересчёта отчётов открыла соединения и не закрыла их",
+      "sender_id": "s.gavrilov@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7003222222222222219",
+      "thread_sn": null,
+      "time": 1773632400,
+      "text": "Кто чинил? Уже стабильно?",
+      "sender_id": "a.morozov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "s.gavrilov@corp.example",
+          "time": 1773630720,
+          "text": "Инцидент INC-2291: пятиминутка недоступности API. Пятьсот третьи на всех эндпоинтах с 03:07 до 03:12 по Москве"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7003333333333333330",
+      "thread_sn": null,
+      "time": 1773632640,
+      "text": "Я перезапустил воркер, соединения освободились. Постмортем напишу утром",
+      "sender_id": "s.gavrilov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "a.morozov@corp.example",
+          "time": 1773632400,
+          "text": "Кто чинил? Уже стабильно?"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7003444444444444441",
+      "thread_sn": null,
+      "time": 1773655500,
+      "text": "Постмортем по INC-2291 готов: https://redacted.example/postmortem/2291. Кратко — добавили таймаут на соединение и лимит на пул, плюс алерт на количество активных коннектов",
+      "sender_id": "s.gavrilov@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7003555555555555552",
+      "thread_sn": null,
+      "time": 1773657000,
+      "text": "Спасибо. Давайте на ретро обсудим, почему алерта на пул не было изначально",
+      "sender_id": "n.polyakova@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "s.gavrilov@corp.example",
+          "time": 1773655500,
+          "text": "Постмортем по INC-2291 готов: https://redacted.example/postmortem/2291. Кратко — добавили таймаут на соединение и лимит на пул, плюс алерт на количество активных коннектов"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7003666666666666663",
+      "thread_sn": null,
+      "time": 1773837000,
+      "text": "Напоминаю: в четверг в 16:00 внутренний техтолк. Тема — миграция монолита на сервисы, докладывает Дмитрий Кузнецов. Формат гибридный",
+      "sender_id": "e.titova@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7003777777777777774",
+      "thread_sn": null,
+      "time": 1773837900,
+      "text": "А запись будет? В четверг не смогу",
+      "sender_id": "i.zhuravlev@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "e.titova@corp.example",
+          "time": 1773837000,
+          "text": "Напоминаю: в четверг в 16:00 внутренний техтолк. Тема — миграция монолита на сервисы, докладывает Дмитрий Кузнецов. Формат гибридный"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7003888888888888885",
+      "thread_sn": null,
+      "time": 1773838200,
+      "text": "Да, все техтолки пишем и складываем в вики, раздел Записи встреч",
+      "sender_id": "e.titova@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "i.zhuravlev@corp.example",
+          "time": 1773837900,
+          "text": "А запись будет? В четверг не смогу"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7003999999999999996",
+      "thread_sn": null,
+      "time": 1773839400,
+      "text": "Если есть вопросы по теме заранее — кидайте сюда, включу в доклад",
+      "sender_id": "d.kuznetsov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "e.titova@corp.example",
+          "time": 1773837000,
+          "text": "Напоминаю: в четверг в 16:00 внутренний техтолк. Тема — миграция монолита на сервисы, докладывает Дмитрий Кузнецов. Формат гибридный"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7004111111111111107",
+      "thread_sn": null,
+      "time": 1773913200,
+      "text": "Предлагаю договориться про ревью: сейчас мердж-реквесты висят по три дня, потому что непонятно, кто смотрит",
+      "sender_id": "e.titova@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7004222222222222218",
+      "thread_sn": null,
+      "time": 1773914400,
+      "text": "Согласна. Давайте так: два аппрува для прода, один для внутренних библиотек. И назначать ревьюера явно, а не в пустоту",
+      "sender_id": "n.polyakova@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "d.kuznetsov@corp.example",
+          "time": 1773839400,
+          "text": "Если есть вопросы по теме заранее — кидайте сюда, включу в доклад"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7004333333333333329",
+      "thread_sn": null,
+      "time": 1773915300,
+      "text": "Ещё бы ограничить размер: больше 400 строк диффа ревьюить бессмысленно, всё равно пролистываешь",
+      "sender_id": "a.morozov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "e.titova@corp.example",
+          "time": 1773913200,
+          "text": "Предлагаю договориться про ревью: сейчас мердж-реквесты висят по три дня, потому что непонятно, кто смотрит"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7004444444444444440",
+      "thread_sn": null,
+      "time": 1773916500,
+      "text": "Поддерживаю. И правило: если МР висит больше суток без реакции — автор пингует в чат",
+      "sender_id": "d.kuznetsov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "n.polyakova@corp.example",
+          "time": 1773914400,
+          "text": "Согласна. Давайте так: два аппрува для прода, один для внутренних библиотек. И назначать ревьюера явно, а не в пустоту"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7004555555555555551",
+      "thread_sn": null,
+      "time": 1773918000,
+      "text": "Зафиксировала в вики, раздел Практики разработки. Пробуем месяц, потом обсудим на ретро",
+      "sender_id": "n.polyakova@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7004666666666666662",
+      "thread_sn": null,
+      "time": 1774016400,
+      "text": "Вопрос: как у нас принято накатывать миграции базы? В сервисе, который я смотрю, есть папка migrations, но запускается непонятно чем",
+      "sender_id": "i.zhuravlev@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7004777777777777773",
+      "thread_sn": null,
+      "time": 1774017600,
+      "text": "Через goose. Файлы называются timestamp_name.sql, накатываются командой task migrate перед стартом сервиса",
+      "sender_id": "d.kuznetsov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "n.polyakova@corp.example",
+          "time": 1773918000,
+          "text": "Зафиксировала в вики, раздел Практики разработки. Пробуем месяц, потом обсудим на ретро"
+        }
+      ],
+      "mentions": [
+        "i.zhuravlev@corp.example"
+      ],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7004888888888888884",
+      "thread_sn": null,
+      "time": 1774018800,
+      "text": "А откатывать как? Если миграция сломала прод",
+      "sender_id": "i.zhuravlev@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "i.zhuravlev@corp.example",
+          "time": 1774016400,
+          "text": "Вопрос: как у нас принято накатывать миграции базы? В сервисе, который я смотрю, есть папка migrations, но запускается непонятно чем"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7004999999999999995",
+      "thread_sn": null,
+      "time": 1774020000,
+      "text": "goose down откатывает одну последнюю. Но правило такое: миграции должны быть обратно совместимыми, чтобы старая версия кода работала с новой схемой. Тогда откатывать надо код, а не базу",
+      "sender_id": "d.kuznetsov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "d.kuznetsov@corp.example",
+          "time": 1774017600,
+          "text": "Через goose. Файлы называются timestamp_name.sql, накатываются командой task migrate перед стартом сервиса"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7005111111111111106",
+      "thread_sn": null,
+      "time": 1774021500,
+      "text": "Плюс не удаляем колонки сразу. Сначала перестаём писать, через релиз перестаём читать, и только потом дропаем",
+      "sender_id": "a.morozov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "i.zhuravlev@corp.example",
+          "time": 1774018800,
+          "text": "А откатывать как? Если миграция сломала прод"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7005222222222222217",
+      "thread_sn": null,
+      "time": 1774264200,
+      "text": "Больно смотреть в логи: половина сервисов пишет текстом, половина json. Грепать невозможно",
+      "sender_id": "s.gavrilov@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7005333333333333328",
+      "thread_sn": null,
+      "time": 1774265400,
+      "text": "Давайте приведём к структурированным логам везде. Обязательные поля: уровень, время, сервис, трейс, сообщение",
+      "sender_id": "a.morozov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "a.morozov@corp.example",
+          "time": 1774021500,
+          "text": "Плюс не удаляем колонки сразу. Сначала перестаём писать, через релиз перестаём читать, и только потом дропаем"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7005444444444444439",
+      "thread_sn": null,
+      "time": 1774266600,
+      "text": "И договориться, что в проде уровень info, а debug включается через переменную окружения без пересборки",
+      "sender_id": "e.titova@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "s.gavrilov@corp.example",
+          "time": 1774264200,
+          "text": "Больно смотреть в логи: половина сервисов пишет текстом, половина json. Грепать невозможно"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7005555555555555550",
+      "thread_sn": null,
+      "time": 1774267800,
+      "text": "Важно ещё не логировать персональные данные и токены. У нас пару раз проскакивало",
+      "sender_id": "d.kuznetsov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "s.gavrilov@corp.example",
+          "time": 1774264200,
+          "text": "Больно смотреть в логи: половина сервисов пишет текстом, половина json. Грепать невозможно"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7005666666666666661",
+      "thread_sn": null,
+      "time": 1774269000,
+      "text": "Согласен. В библиотеке platform-log добавлю маскирование по списку полей",
+      "sender_id": "a.morozov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "e.titova@corp.example",
+          "time": 1774266600,
+          "text": "И договориться, что в проде уровень info, а debug включается через переменную окружения без пересборки"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7005777777777777772",
+      "thread_sn": null,
+      "time": 1774278600,
+      "text": "Выкатил версию 2.4.0 на прод. Основное — переход на новый профиль сборки и лимиты пула соединений из постмортема",
+      "sender_id": "d.kuznetsov@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7005888888888888883",
+      "thread_sn": null,
+      "time": 1774281120,
+      "text": "На графиках вижу рост задержки на 95-м перцентиле после выкатки. Это ожидаемо?",
+      "sender_id": "n.polyakova@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "a.morozov@corp.example",
+          "time": 1774269000,
+          "text": "Согласен. В библиотеке platform-log добавлю маскирование по списку полей"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7005999999999999994",
+      "thread_sn": null,
+      "time": 1774281900,
+      "text": "Не ожидаемо. Откатываю на 2.3.7, буду разбираться",
+      "sender_id": "d.kuznetsov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "d.kuznetsov@corp.example",
+          "time": 1774278600,
+          "text": "Выкатил версию 2.4.0 на прод. Основное — переход на новый профиль сборки и лимиты пула соединений из постмортема"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7006111111111111105",
+      "thread_sn": null,
+      "time": 1774282800,
+      "text": "Откат прошёл, задержки вернулись в норму",
+      "sender_id": "d.kuznetsov@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7006222222222222216",
+      "thread_sn": null,
+      "time": 1774286400,
+      "text": "Нашёл: в новой версии кэш конфигов инициализировался на каждый запрос вместо одного раза при старте. Поправил, завтра выкачу 2.4.1",
+      "sender_id": "d.kuznetsov@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7006333333333333327",
+      "thread_sn": null,
+      "time": 1774350000,
+      "text": "2.4.1 на проде, задержки в норме. Добавил тест, который ловит повторную инициализацию кэша",
+      "sender_id": "d.kuznetsov@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7006444444444444438",
+      "thread_sn": null,
+      "time": 1774432800,
+      "text": "Пора формализовать дежурства. Сейчас по факту всё падает на Сергея, это не масштабируется",
+      "sender_id": "n.polyakova@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7006555555555555549",
+      "thread_sn": null,
+      "time": 1774434000,
+      "text": "Поддерживаю, я не против дежурить, но хочется предсказуемости",
+      "sender_id": "s.gavrilov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "d.kuznetsov@corp.example",
+          "time": 1774350000,
+          "text": "2.4.1 на проде, задержки в норме. Добавил тест, который ловит повторную инициализацию кэша"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7006666666666666660",
+      "thread_sn": null,
+      "time": 1774435200,
+      "text": "Предлагаю недельные смены по очереди, передача по пятницам. Новичков включаем через месяц после выхода, сначала вторым номером",
+      "sender_id": "n.polyakova@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "n.polyakova@corp.example",
+          "time": 1774432800,
+          "text": "Пора формализовать дежурства. Сейчас по факту всё падает на Сергея, это не масштабируется"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7006777777777777771",
+      "thread_sn": null,
+      "time": 1774436400,
+      "text": "И надо описать типовые сценарии: что делать при пятисотках, при лаге консьюмера, при заполнении диска. Иначе дежурство превращается в угадайку",
+      "sender_id": "a.morozov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "s.gavrilov@corp.example",
+          "time": 1774434000,
+          "text": "Поддерживаю, я не против дежурить, но хочется предсказуемости"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7006888888888888882",
+      "thread_sn": null,
+      "time": 1774447200,
+      "text": "Спасибо всем за помощь на первой неделе! Окружение поднял, первый мердж-реквест уже в ревью",
+      "sender_id": "i.zhuravlev@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7006999999999999993",
+      "thread_sn": null,
+      "time": 1774448100,
+      "text": "Отлично! Посмотрю сегодня",
+      "sender_id": "n.polyakova@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "a.morozov@corp.example",
+          "time": 1774436400,
+          "text": "И надо описать типовые сценарии: что делать при пятисотках, при лаге консьюмера, при заполнении диска. Иначе дежурство превращается в угадайку"
+        }
+      ],
+      "mentions": [
+        "i.zhuravlev@corp.example"
+      ],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7007111111111111104",
+      "thread_sn": null,
+      "time": 1774618800,
+      "text": "Вопрос по секретам: где правильно хранить ключи для внешних API? Сейчас часть в переменных окружения, часть в конфигах в репозитории",
+      "sender_id": "e.titova@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7007222222222222215",
+      "thread_sn": null,
+      "time": 1774620120,
+      "text": "В репозитории быть не должно ничего. Всё в Vault, сервисы забирают при старте через сайдкар. Конфиги в гите оставляем только несекретные",
+      "sender_id": "a.morozov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "n.polyakova@corp.example",
+          "time": 1774448100,
+          "text": "Отлично! Посмотрю сегодня"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7007333333333333326",
+      "thread_sn": null,
+      "time": 1774620900,
+      "text": "Понял, заведу задачу на вынос. А ротация ключей как устроена?",
+      "sender_id": "e.titova@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "e.titova@corp.example",
+          "time": 1774618800,
+          "text": "Вопрос по секретам: где правильно хранить ключи для внешних API? Сейчас часть в переменных окружения, часть в конфигах в репозитории"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7007444444444444437",
+      "thread_sn": null,
+      "time": 1774621800,
+      "text": "Автоматическая, раз в 90 дней. Сервису надо уметь перечитывать секрет без перезапуска — для этого есть библиотека platform-secrets",
+      "sender_id": "a.morozov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "a.morozov@corp.example",
+          "time": 1774620120,
+          "text": "В репозитории быть не должно ничего. Всё в Vault, сервисы забирают при старте через сайдкар. Конфиги в гите оставляем только несекретные"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7007555555555555548",
+      "thread_sn": null,
+      "time": 1774623600,
+      "text": "Добавлю: если секрет всё-таки утёк в гит, недостаточно удалить коммит. Надо отзывать сам ключ, история остаётся у всех кто клонировал",
+      "sender_id": "s.gavrilov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "e.titova@corp.example",
+          "time": 1774618800,
+          "text": "Вопрос по секретам: где правильно хранить ключи для внешних API? Сейчас часть в переменных окружения, часть в конфигах в репозитории"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7007666666666666659",
+      "thread_sn": null,
+      "time": 1774863900,
+      "text": "Коллеги, кто отвечает за мониторинг очередей? Хочу добавить алерт на глубину очереди нотификаций",
+      "sender_id": "s.gavrilov@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7007777777777777770",
+      "thread_sn": null,
+      "time": 1774864800,
+      "text": "Это ко мне. Заводи в репозитории alerts, там шаблоны для Kafka. Порог поставь на 10 тысяч сообщений с окном 5 минут",
+      "sender_id": "n.polyakova@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "s.gavrilov@corp.example",
+          "time": 1774623600,
+          "text": "Добавлю: если секрет всё-таки утёк в гит, недостаточно удалить коммит. Надо отзывать сам ключ, история остаётся у всех кто клонировал"
+        }
+      ],
+      "mentions": [
+        "s.gavrilov@corp.example"
+      ],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7007888888888888881",
+      "thread_sn": null,
+      "time": 1774866000,
+      "text": "А на что алертить кроме глубины? Лаг консьюмера, наверное",
+      "sender_id": "s.gavrilov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "s.gavrilov@corp.example",
+          "time": 1774863900,
+          "text": "Коллеги, кто отвечает за мониторинг очередей? Хочу добавить алерт на глубину очереди нотификаций"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7007999999999999992",
+      "thread_sn": null,
+      "time": 1774867200,
+      "text": "Лаг обязательно, и ещё скорость роста. Если очередь растёт линейно полчаса — значит консьюмер не справляется, даже если абсолютное значение ещё маленькое",
+      "sender_id": "n.polyakova@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "n.polyakova@corp.example",
+          "time": 1774864800,
+          "text": "Это ко мне. Заводи в репозитории alerts, там шаблоны для Kafka. Порог поставь на 10 тысяч сообщений с окном 5 минут"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7008111111111111103",
+      "thread_sn": null,
+      "time": 1775042400,
+      "text": "Эндпоинт списка заказов тормозит: 2 секунды на 95-м перцентиле. Раньше было 200 миллисекунд",
+      "sender_id": "e.titova@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7008222222222222214",
+      "thread_sn": null,
+      "time": 1775043900,
+      "text": "Смотрел трейсы? В джагере видно, на чём именно время уходит",
+      "sender_id": "d.kuznetsov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "n.polyakova@corp.example",
+          "time": 1774867200,
+          "text": "Лаг обязательно, и ещё скорость роста. Если очередь растёт линейно полчаса — значит консьюмер не справляется, даже если абсолютное значение ещё маленькое"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7008333333333333325",
+      "thread_sn": null,
+      "time": 1775045400,
+      "text": "Посмотрела: 1.8 секунды на запросе к базе. Причём план запроса показывает seq scan по таблице заказов",
+      "sender_id": "e.titova@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "e.titova@corp.example",
+          "time": 1775042400,
+          "text": "Эндпоинт списка заказов тормозит: 2 секунды на 95-м перцентиле. Раньше было 200 миллисекунд"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7008444444444444436",
+      "thread_sn": null,
+      "time": 1775046600,
+      "text": "Значит нет индекса на поле фильтрации. Таблица большая?",
+      "sender_id": "d.kuznetsov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "d.kuznetsov@corp.example",
+          "time": 1775043900,
+          "text": "Смотрел трейсы? В джагере видно, на чём именно время уходит"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7008555555555555547",
+      "thread_sn": null,
+      "time": 1775047800,
+      "text": "12 миллионов строк. Фильтруем по паре клиент плюс статус",
+      "sender_id": "e.titova@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "e.titova@corp.example",
+          "time": 1775045400,
+          "text": "Посмотрела: 1.8 секунды на запросе к базе. Причём план запроса показывает seq scan по таблице заказов"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7008666666666666658",
+      "thread_sn": null,
+      "time": 1775049600,
+      "text": "Тогда составной индекс по этим двум полям. Только накатывай CONCURRENTLY, иначе таблица залочится на время создания и прод встанет",
+      "sender_id": "a.morozov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "d.kuznetsov@corp.example",
+          "time": 1775046600,
+          "text": "Значит нет индекса на поле фильтрации. Таблица большая?"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7008777777777777769",
+      "thread_sn": null,
+      "time": 1775124000,
+      "text": "Индекс накатила ночью, CONCURRENTLY, заняло 12 минут. Задержка упала до 180 миллисекунд",
+      "sender_id": "e.titova@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7008888888888888880",
+      "thread_sn": null,
+      "time": 1775125200,
+      "text": "Отлично. Давай добавим в чек-лист ревью пункт про индексы под новые фильтры, чтобы не ловить это на проде",
+      "sender_id": "n.polyakova@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "a.morozov@corp.example",
+          "time": 1775049600,
+          "text": "Тогда составной индекс по этим двум полям. Только накатывай CONCURRENTLY, иначе таблица залочится на время создания и прод встанет"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7008999999999999991",
+      "thread_sn": null,
+      "time": 1775126400,
+      "text": "И алерт на медленные запросы бы не помешал. В постгресе есть pg_stat_statements, можно вытаскивать топ по суммарному времени",
+      "sender_id": "s.gavrilov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "e.titova@corp.example",
+          "time": 1775124000,
+          "text": "Индекс накатила ночью, CONCURRENTLY, заняло 12 минут. Задержка упала до 180 миллисекунд"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7009111111111111102",
+      "thread_sn": null,
+      "time": 1775467800,
+      "text": "Планирую обновить Go до 1.24 во всех сервисах. Кто-нибудь видит риски?",
+      "sender_id": "a.morozov@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7009222222222222213",
+      "thread_sn": null,
+      "time": 1775469000,
+      "text": "У нас в двух сервисах зависимость от библиотеки, которая давно не обновлялась. Надо проверить, соберётся ли",
+      "sender_id": "d.kuznetsov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "s.gavrilov@corp.example",
+          "time": 1775126400,
+          "text": "И алерт на медленные запросы бы не помешал. В постгресе есть pg_stat_statements, можно вытаскивать топ по суммарному времени"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7009333333333333324",
+      "thread_sn": null,
+      "time": 1775470200,
+      "text": "Предлагаю обновлять по одному сервису, начиная с некритичных. И держать в голове, что образы тоже надо пересобрать",
+      "sender_id": "s.gavrilov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "s.gavrilov@corp.example",
+          "time": 1775126400,
+          "text": "И алерт на медленные запросы бы не помешал. В постгресе есть pg_stat_statements, можно вытаскивать топ по суммарному времени"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7009444444444444435",
+      "thread_sn": null,
+      "time": 1775471400,
+      "text": "Договорились. Начну с сервиса отчётов, он самый изолированный",
+      "sender_id": "a.morozov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "d.kuznetsov@corp.example",
+          "time": 1775469000,
+          "text": "У нас в двух сервисах зависимость от библиотеки, которая давно не обновлялась. Надо проверить, соберётся ли"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7009555555555555546",
+      "thread_sn": null,
+      "time": 1775664000,
+      "text": "Обновление до 1.24 закончено во всех сервисах. Из неожиданного — пришлось поправить пару мест, где полагались на порядок обхода мапы",
+      "sender_id": "a.morozov@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7009666666666666657",
+      "thread_sn": null,
+      "time": 1775743200,
+      "text": "Нужен механизм фичефлагов: хотим выкатывать функциональность частями и включать процентом пользователей",
+      "sender_id": "n.polyakova@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7009777777777777768",
+      "thread_sn": null,
+      "time": 1775744400,
+      "text": "Свой писать или взять готовое? Есть unleash, есть flagsmith",
+      "sender_id": "d.kuznetsov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "a.morozov@corp.example",
+          "time": 1775664000,
+          "text": "Обновление до 1.24 закончено во всех сервисах. Из неожиданного — пришлось поправить пару мест, где полагались на порядок обхода мапы"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7009888888888888879",
+      "thread_sn": null,
+      "time": 1775745600,
+      "text": "Свой не хочу, это отдельный сервис со своим хранилищем и админкой. Лучше готовое",
+      "sender_id": "e.titova@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "n.polyakova@corp.example",
+          "time": 1775743200,
+          "text": "Нужен механизм фичефлагов: хотим выкатывать функциональность частями и включать процентом пользователей"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7009999999999999990",
+      "thread_sn": null,
+      "time": 1775746800,
+      "text": "Согласна. Возьмём unleash, он self-hosted и умеет процентную раскатку из коробки",
+      "sender_id": "n.polyakova@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "d.kuznetsov@corp.example",
+          "time": 1775744400,
+          "text": "Свой писать или взять готовое? Есть unleash, есть flagsmith"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7010111111111111101",
+      "thread_sn": null,
+      "time": 1775748000,
+      "text": "Важно сразу договориться про уборку флагов. Иначе через год будет полсотни мёртвых условий в коде",
+      "sender_id": "a.morozov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "e.titova@corp.example",
+          "time": 1775745600,
+          "text": "Свой не хочу, это отдельный сервис со своим хранилищем и админкой. Лучше готовое"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7010222222222222212",
+      "thread_sn": null,
+      "time": 1776076200,
+      "text": "Перед запуском нотификаций надо прогнать нагрузочное. Кто-нибудь делал у нас раньше?",
+      "sender_id": "s.gavrilov@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7010333333333333323",
+      "thread_sn": null,
+      "time": 1776077400,
+      "text": "Я гонял k6 на стенде. Скрипты лежат в репозитории perf, там же профили нагрузки",
+      "sender_id": "d.kuznetsov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "a.morozov@corp.example",
+          "time": 1775748000,
+          "text": "Важно сразу договориться про уборку флагов. Иначе через год будет полсотни мёртвых условий в коде"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7010444444444444434",
+      "thread_sn": null,
+      "time": 1776078600,
+      "text": "На стенде или на проде? Хочется понять реальный потолок",
+      "sender_id": "s.gavrilov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "s.gavrilov@corp.example",
+          "time": 1776076200,
+          "text": "Перед запуском нотификаций надо прогнать нагрузочное. Кто-нибудь делал у нас раньше?"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7010555555555555545",
+      "thread_sn": null,
+      "time": 1776079800,
+      "text": "Только на стенде. Но стенд по железу вчетверо меньше прода, поэтому результат умножаем и закладываем запас",
+      "sender_id": "d.kuznetsov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "d.kuznetsov@corp.example",
+          "time": 1776077400,
+          "text": "Я гонял k6 на стенде. Скрипты лежат в репозитории perf, там же профили нагрузки"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7010666666666666656",
+      "thread_sn": null,
+      "time": 1776081600,
+      "text": "И обязательно снимайте не только запросы в секунду, но и потребление памяти с процессором. Иначе упрёмся в лимиты, а не в код",
+      "sender_id": "n.polyakova@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "s.gavrilov@corp.example",
+          "time": 1776078600,
+          "text": "На стенде или на проде? Хочется понять реальный потолок"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7010777777777777767",
+      "thread_sn": null,
+      "time": 1776292800,
+      "text": "Инцидент INC-2350: сервис нотификаций перезапускается каждые 40 минут по OOM",
+      "sender_id": "d.kuznetsov@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7010888888888888878",
+      "thread_sn": null,
+      "time": 1776293700,
+      "text": "Память растёт линейно с момента старта, на графике видно чистую пилу. Похоже на утечку",
+      "sender_id": "s.gavrilov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "n.polyakova@corp.example",
+          "time": 1776081600,
+          "text": "И обязательно снимайте не только запросы в секунду, но и потребление памяти с процессором. Иначе упрёмся в лимиты, а не в код"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7010999999999999989",
+      "thread_sn": null,
+      "time": 1776294600,
+      "text": "Снял профиль через pprof. Растёт число горутин, за час набирается около 40 тысяч",
+      "sender_id": "d.kuznetsov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "d.kuznetsov@corp.example",
+          "time": 1776292800,
+          "text": "Инцидент INC-2350: сервис нотификаций перезапускается каждые 40 минут по OOM"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7011111111111111100",
+      "thread_sn": null,
+      "time": 1776295800,
+      "text": "Нашёл: на каждое сообщение из кафки создаётся горутина с контекстом без таймаута. Если внешний вызов зависает, горутина живёт вечно",
+      "sender_id": "d.kuznetsov@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7011222222222222211",
+      "thread_sn": null,
+      "time": 1776297000,
+      "text": "Классика. Быстрый фикс — добавить таймаут в контекст?",
+      "sender_id": "s.gavrilov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "d.kuznetsov@corp.example",
+          "time": 1776294600,
+          "text": "Снял профиль через pprof. Растёт число горутин, за час набирается около 40 тысяч"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7011333333333333322",
+      "thread_sn": null,
+      "time": 1776298200,
+      "text": "Да, поставил 30 секунд плюс ограничение на число одновременных обработчиков. Выкатываю хотфикс",
+      "sender_id": "d.kuznetsov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "d.kuznetsov@corp.example",
+          "time": 1776295800,
+          "text": "Нашёл: на каждое сообщение из кафки создаётся горутина с контекстом без таймаута. Если внешний вызов зависает, горутина живёт вечно"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7011444444444444433",
+      "thread_sn": null,
+      "time": 1776331800,
+      "text": "За ночь память ровная, перезапусков не было. Постмортем по INC-2350 напишу сегодня",
+      "sender_id": "d.kuznetsov@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7011555555555555544",
+      "thread_sn": null,
+      "time": 1776438000,
+      "text": "Ретро в пятницу. Два инцидента за месяц, оба про ресурсы — соединения и горутины. Хочу обсудить, что можно поймать раньше",
+      "sender_id": "n.polyakova@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7011666666666666655",
+      "thread_sn": null,
+      "time": 1776439200,
+      "text": "У обоих общая черта: не было алерта на сам ресурс. Смотрели на симптом — пятисотки, OOM — а не на причину",
+      "sender_id": "s.gavrilov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "d.kuznetsov@corp.example",
+          "time": 1776298200,
+          "text": "Да, поставил 30 секунд плюс ограничение на число одновременных обработчиков. Выкатываю хотфикс"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7011777777777777766",
+      "thread_sn": null,
+      "time": 1776440400,
+      "text": "Предлагаю завести стандартный набор алертов для каждого сервиса: соединения к базе, горутины, память, лаг очереди",
+      "sender_id": "a.morozov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "d.kuznetsov@corp.example",
+          "time": 1776331800,
+          "text": "За ночь память ровная, перезапусков не было. Постмортем по INC-2350 напишу сегодня"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7011888888888888877",
+      "thread_sn": null,
+      "time": 1776441600,
+      "text": "Да, и вынести это в шаблон, чтобы новый сервис получал их автоматически при создании",
+      "sender_id": "n.polyakova@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "n.polyakova@corp.example",
+          "time": 1776438000,
+          "text": "Ретро в пятницу. Два инцидента за месяц, оба про ресурсы — соединения и горутины. Хочу обсудить, что можно поймать раньше"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7011999999999999988",
+      "thread_sn": null,
+      "time": 1776682800,
+      "text": "За полтора месяца заметил: документация местами устарела. Онбординг-гайд ссылается на Makefile, которого уже нет",
+      "sender_id": "i.zhuravlev@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7012111111111111099",
+      "thread_sn": null,
+      "time": 1776684000,
+      "text": "Спасибо, что заметил. Это вечная проблема — правим код, забываем документацию",
+      "sender_id": "e.titova@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "a.morozov@corp.example",
+          "time": 1776440400,
+          "text": "Предлагаю завести стандартный набор алертов для каждого сервиса: соединения к базе, горутины, память, лаг очереди"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7012222222222222210",
+      "thread_sn": null,
+      "time": 1776685200,
+      "text": "Может добавить в чек-лист МР пункт про документацию? Хотя бы галочку, что проверил",
+      "sender_id": "a.morozov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "n.polyakova@corp.example",
+          "time": 1776441600,
+          "text": "Да, и вынести это в шаблон, чтобы новый сервис получал их автоматически при создании"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7012333333333333321",
+      "thread_sn": null,
+      "time": 1776686400,
+      "text": "Давайте. И раз в квартал будем прогонять онбординг на новом человеке — лучший способ найти протухшее",
+      "sender_id": "n.polyakova@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "i.zhuravlev@corp.example",
+          "time": 1776682800,
+          "text": "За полтора месяца заметил: документация местами устарела. Онбординг-гайд ссылается на Makefile, которого уже нет"
+        }
+      ],
+      "mentions": [
+        "i.zhuravlev@corp.example"
+      ],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7012444444444444432",
+      "thread_sn": null,
+      "time": 1776864600,
+      "text": "Обсудим протокол для внутренних вызовов? Сейчас везде REST с json, а между сервисами это лишний оверхед на сериализацию",
+      "sender_id": "d.kuznetsov@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7012555555555555543",
+      "thread_sn": null,
+      "time": 1776865800,
+      "text": "gRPC даст схему и генерацию клиентов. Но отлаживать сложнее — curl не поработаешь",
+      "sender_id": "s.gavrilov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "a.morozov@corp.example",
+          "time": 1776685200,
+          "text": "Может добавить в чек-лист МР пункт про документацию? Хотя бы галочку, что проверил"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7012666666666666654",
+      "thread_sn": null,
+      "time": 1776867000,
+      "text": "И на внешний периметр gRPC всё равно не выставишь, придётся держать оба",
+      "sender_id": "e.titova@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "n.polyakova@corp.example",
+          "time": 1776686400,
+          "text": "Давайте. И раз в квартал будем прогонять онбординг на новом человеке — лучший способ найти протухшее"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7012777777777777765",
+      "thread_sn": null,
+      "time": 1776868200,
+      "text": "Предлагаю так: наружу REST, между сервисами gRPC там, где вызовы горячие. Не переписывать всё разом",
+      "sender_id": "d.kuznetsov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "d.kuznetsov@corp.example",
+          "time": 1776864600,
+          "text": "Обсудим протокол для внутренних вызовов? Сейчас везде REST с json, а между сервисами это лишний оверхед на сериализацию"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7012888888888888876",
+      "thread_sn": null,
+      "time": 1776870000,
+      "text": "Разумно. Начнём с пары нотификации-профили, там больше всего трафика. Замерим до и после",
+      "sender_id": "n.polyakova@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "s.gavrilov@corp.example",
+          "time": 1776865800,
+          "text": "gRPC даст схему и генерацию клиентов. Но отлаживать сложнее — curl не поработаешь"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7012999999999999987",
+      "thread_sn": null,
+      "time": 1777024800,
+      "text": "Пришёл счёт за облако, вырос на 30 процентов за квартал. Надо разобраться, куда уходит",
+      "sender_id": "n.polyakova@corp.example",
+      "file_snippets": "",
+      "parts": [],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": false
+    },
+    {
+      "id": "7013111111111111098",
+      "thread_sn": null,
+      "time": 1777026600,
+      "text": "Основное — стенды. Их семь штук, и они крутятся круглосуточно, хотя используются в рабочее время",
+      "sender_id": "s.gavrilov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "d.kuznetsov@corp.example",
+          "time": 1776868200,
+          "text": "Предлагаю так: наружу REST, между сервисами gRPC там, где вызовы горячие. Не переписывать всё разом"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7013222222222222209",
+      "thread_sn": null,
+      "time": 1777027800,
+      "text": "Можно гасить по расписанию: с 20:00 до 8:00 и на выходные. Это сразу минус две трети времени работы",
+      "sender_id": "a.morozov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "n.polyakova@corp.example",
+          "time": 1776870000,
+          "text": "Разумно. Начнём с пары нотификации-профили, там больше всего трафика. Замерим до и после"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7013333333333333320",
+      "thread_sn": null,
+      "time": 1777029000,
+      "text": "Только не трогать стенд для нагрузочного, там долгие прогоны бывают ночью",
+      "sender_id": "d.kuznetsov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "n.polyakova@corp.example",
+          "time": 1777024800,
+          "text": "Пришёл счёт за облако, вырос на 30 процентов за квартал. Надо разобраться, куда уходит"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7013444444444444431",
+      "thread_sn": null,
+      "time": 1777030200,
+      "text": "Учтём. Сергей, заведёшь задачу на автогашение с исключением для perf-стенда?",
+      "sender_id": "n.polyakova@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "s.gavrilov@corp.example",
+          "time": 1777026600,
+          "text": "Основное — стенды. Их семь штук, и они крутятся круглосуточно, хотя используются в рабочее время"
+        }
+      ],
+      "mentions": [
+        "s.gavrilov@corp.example"
+      ],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    },
+    {
+      "id": "7013555555555555542",
+      "thread_sn": null,
+      "time": 1777030800,
+      "text": "Сделаю",
+      "sender_id": "s.gavrilov@corp.example",
+      "file_snippets": "",
+      "parts": [
+        {
+          "mediaType": "quote",
+          "sn": "a.morozov@corp.example",
+          "time": 1777027800,
+          "text": "Можно гасить по расписанию: с 20:00 до 8:00 и на выходные. Это сразу минус две трети времени работы"
+        }
+      ],
+      "mentions": [],
+      "member_event": null,
+      "is_system": false,
+      "is_hidden": false,
+      "is_forward": false,
+      "is_quote": true
+    }
+  ]
+}
