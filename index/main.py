@@ -11,7 +11,6 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
-# Ваш сервис должен считывать эти переменные из окружения (env), так как проверяющая система управляет ими
 HOST = os.getenv("HOST", "0.0.0.0")
 PORT = int(os.getenv("PORT", "8004"))
 
@@ -19,12 +18,11 @@ logging.basicConfig(level=os.getenv("LOG_LEVEL", "INFO"))
 logger = logging.getLogger("index-service")
 
 
-# Модель данных, которую мы предоставляем и рассчитываем получать от вас
 class Chat(BaseModel):
     id: str
     name: str
     sn: str
-    type: str  # group, channel, private
+    type: str
     is_public: bool | None = None
     members_count: int | None = None
     members: list[dict[str, Any]] | None = None
@@ -54,7 +52,6 @@ class ChatData(BaseModel):
 
 class IndexAPIRequest(BaseModel):
     data: ChatData
-
 
 
 class IndexAPIItem(BaseModel):
@@ -91,14 +88,12 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="Index Service", version="0.1.0", lifespan=lifespan)
 
 
-
 MESSAGES_PER_CHUNK = 5   
 MESSAGES_OVERLAP = 3      
 CHUNK_STEP = 5            
 MAX_CHUNK_CHARS = 6000    
 SPARSE_MODEL_NAME = "Qdrant/bm25"
 FASTEMBED_CACHE_PATH = "/models/fastembed"
-
 
 
 UVICORN_WORKERS = 8
@@ -177,11 +172,9 @@ def build_chunks(
             break
 
 
-
         window_new = [m for m in window if m in new]
         if not window_new:
             continue
-
 
 
         tagged_lines: list[str] = []
@@ -244,7 +237,6 @@ def build_chunks(
     return result
 
 
-
 @app.get("/health")
 async def health() -> dict[str, str]:
     return {"status": "ok"}
@@ -264,8 +256,6 @@ async def index(payload: IndexAPIRequest) -> IndexAPIResponse:
 @lru_cache(maxsize=1)
 def get_sparse_model():
     from fastembed import SparseTextEmbedding
-
-
 
 
     logger.info(
@@ -298,7 +288,6 @@ async def sparse_embedding(payload: SparseEmbeddingRequest) -> dict[str, Any]:
     vectors = await asyncio.to_thread(embed_sparse_texts, payload.texts)
     return {"vectors": vectors}
 
-# красивая обработка ошибок
 @app.exception_handler(Exception)
 async def exception_handler(request: Request, exc: Exception) -> JSONResponse:
     logger.exception(exc)
